@@ -7,9 +7,9 @@
 }
 
 .Game-dice {
-	background-color: #4527a0;
+	background-color: #6a1b9a;
 	width: 40%;
-	min-width: 420px;
+	min-width: 450px;
 	height: auto;
 	margin: 0px auto;
 	padding-top: 20px;
@@ -31,8 +31,25 @@
 	outline: none;
 	border: none;
 	color: white;
-	background-color: #0091ea;
+	background: #7f7fd5; /* fallback for old browsers */
+	background: -webkit-linear-gradient(
+		to right,
+		#91eae4,
+		#86a8e7,
+		#7f7fd5
+	); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(
+		to right,
+		#91eae4,
+		#86a8e7,
+		#7f7fd5
+	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
 	font-family: 'Lato', sans-serif;
+	transition: 0.3s;
+	box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px,
+		rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
+		rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
 .Game-dice button:hover {
@@ -47,7 +64,7 @@
 .Game-score {
 	background-color: white;
 	width: 40%;
-	min-width: 420px;
+	min-width: 450px;
 	height: auto;
 	margin: 0px auto;
 	padding-top: 20px;
@@ -77,21 +94,22 @@
 .Game-restart {
 	border: none;
 	font-family: inherit;
-    font-size: 1.3rem;
-    font-weight: bolder;
+	font-size: 1.3rem;
+	font-weight: 300;
 	cursor: pointer;
 	width: auto;
 	margin: 5px 2px 2px 2px;
 	letter-spacing: 1px;
 	outline: none;
-	background: #d500f9;
+	background: #6a1b9a;
 	color: #fff;
-	box-shadow: 0 6px #aa00ff;
+	box-shadow: 0 6px #4a148c;
 	border-radius: 5px;
-    padding: 10px 13px;
-    text-transform: capitalize;
+	padding: 10px 13px;
+	text-transform: capitalize;
+	transition: 0.3s;
 }
 
 .Game-restart:hover {
-    background-color: #aa00ff ;
+	background-color: #311b92;
 }

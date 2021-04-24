@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import Dice from '../Dice/Dice';
 import Score from '../Score/Score';
-import { pickRandomValue, numberToWords } from '../../helpers/helper';
+import { pickRandomValue, numberToWords } from '../../helpers/generalHelper';
 import {
 	individualScore,
 	checkThreeOfKind,
@@ -17,7 +17,7 @@ import {
 } from '../../helpers/scoreHelper';
 
 const ROLLS_LEFT = 3;
-const TOTAL_ROUNDS = 12;
+const TOTAL_ROUNDS = 13;
 
 class Game extends Component {
 	static defaultProps = {
@@ -33,6 +33,7 @@ class Game extends Component {
 					value: pickRandomValue(),
 				};
 			}),
+			isRolling: false,
 			rollsLeft: ROLLS_LEFT,
 			totalScore: 0,
 			totalRounds: TOTAL_ROUNDS,
@@ -47,6 +48,7 @@ class Game extends Component {
 		};
 		this.handleRoll = this.handleRoll.bind(this);
 		this.handleLock = this.handleLock.bind(this);
+		this.unlockAllDie = this.unlockAllDie.bind(this);
 		this.assignUpperScore = this.assignUpperScore.bind(this);
 		this.assignThreeOfKind = this.assignThreeOfKind.bind(this);
 		this.assignFourOfKind = this.assignFourOfKind.bind(this);
@@ -57,28 +59,41 @@ class Game extends Component {
 		this.assignLargeStraight = this.assignLargeStraight.bind(this);
 		this.handleRestart = this.handleRestart.bind(this);
 	}
-	handleRoll() {
+	async handleRoll() {
 		const newDiceValues = this.state.dice.map((die) => {
 			if (!die.isLocked) return { ...die, value: pickRandomValue() };
 			return die;
 		});
-		this.setState({ dice: newDiceValues, rollsLeft: this.state.rollsLeft - 1 });
+		this.setState({ isRolling: true }, () => {
+			setTimeout(() => {
+				this.setState({ isRolling: false });
+			}, 500);
+			this.setState({ dice: newDiceValues, rollsLeft: this.state.rollsLeft - 1 });
+		});
 	}
 	handleLock(uniqueId) {
 		const newDiceLocks = this.state.dice.map((die) => {
-			if (uniqueId === die.id) {
+			if (uniqueId === die.id && !this.state.isRolling) {
 				return { ...die, isLocked: !die.isLocked };
 			}
 			return die;
 		});
 		this.setState({ dice: newDiceLocks });
 	}
-	increaseScore_decreaseRound(newScore) {
+	async unlockAllDie() {
+		console.log('Unlocking all die');
+		const newDiceLocks = this.state.dice.map((die) => {
+			return { ...die, isLocked: false };
+		});
+		this.setState({ dice: newDiceLocks });
+	}
+	async increaseScore_decreaseRound(newScore) {
 		this.setState({
 			totalScore: this.state.totalScore + newScore,
 			totalRounds: this.state.totalRounds - 1,
 		});
-		this.handleRoll();
+		await this.unlockAllDie(this.handleRoll);
+		await this.handleRoll();
 		this.setState({ rollsLeft: ROLLS_LEFT });
 	}
 	assignUpperScore(id) {
@@ -89,49 +104,49 @@ class Game extends Component {
 			this.increaseScore_decreaseRound(newUpperScore[id]);
 		}
 	}
-	assignThreeOfKind(id) {
+	assignThreeOfKind() {
 		if (this.state.threeOfKind === undefined) {
 			const threeScore = checkThreeOfKind(this.state.dice);
 			this.setState({ threeOfKind: threeScore });
 			this.increaseScore_decreaseRound(threeScore);
 		}
 	}
-	assignFourOfKind(id) {
+	assignFourOfKind() {
 		if (this.state.fourOfKind === undefined) {
 			const fourScore = checkFourOfKind(this.state.dice);
 			this.setState({ fourOfKind: fourScore });
 			this.increaseScore_decreaseRound(fourScore);
 		}
 	}
-	assignFullHouse(id) {
+	assignFullHouse() {
 		if (this.state.fullHouse === undefined) {
 			const fullHouseScore = checkFullHouse(this.state.dice);
 			this.setState({ fullHouse: fullHouseScore });
 			this.increaseScore_decreaseRound(fullHouseScore);
 		}
 	}
-	assignSmallStraight(id) {
+	assignSmallStraight() {
 		if (this.state.smallStraight === undefined) {
 			const smallStraightScore = checkSmallStraight(this.state.dice);
 			this.setState({ smallStraight: smallStraightScore });
 			this.increaseScore_decreaseRound(smallStraightScore);
 		}
 	}
-	assignLargeStraight(id) {
+	assignLargeStraight() {
 		if (this.state.largeStraight === undefined) {
 			const largeStraightScore = checkLargeStraight(this.state.dice);
 			this.setState({ largeStraight: largeStraightScore });
 			this.increaseScore_decreaseRound(largeStraightScore);
 		}
 	}
-	assignYahtzee(id) {
+	assignYahtzee() {
 		if (this.state.yahtzee === undefined) {
 			const yahtzeeScore = checkYahtzee(this.state.dice);
 			this.setState({ yahtzee: yahtzeeScore });
 			this.increaseScore_decreaseRound(yahtzeeScore);
 		}
 	}
-	assignChance(id) {
+	assignChance() {
 		const chanceScore = sumAllValues(this.state.dice);
 		if (this.state.chance === undefined) {
 			this.setState({ chance: chanceScore });
@@ -180,11 +195,16 @@ class Game extends Component {
 						nDie={this.props.dice}
 						diceValues={this.state.dice}
 						lock={this.handleLock}
+						isRolling={this.state.isRolling}
 					/>
 					<button
-						className={!!!this.state.rollsLeft ? 'Game-lockedButton' : ''}
+						className={
+							!!!this.state.rollsLeft || this.state.isRolling
+								? 'Game-lockedButton'
+								: ''
+						}
 						onClick={this.handleRoll}
-						disabled={!!!this.state.rollsLeft}
+						disabled={!!!this.state.rollsLeft || this.state.isRolling}
 					>
 						{' '}
 						{this.state.rollsLeft} Rolls Left{' '}
@@ -270,7 +290,7 @@ class Game extends Component {
 						<h1>total score: {this.state.totalScore} </h1>
 					</div>
 					<button className='Game-restart' onClick={this.handleRestart}>
-						play again
+						{this.state.totalRounds === 0 ? 'play again' : 'restart game'}
 					</button>
 				</div>
 			</div>
