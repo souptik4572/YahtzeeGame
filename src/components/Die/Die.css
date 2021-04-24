@@ -10,25 +10,11 @@
 }
 
 .Die-rolling {
-	animation: mymove 0.5s ease-in-out;
+	animation: mymove 1s ease-in-out;
 }
 
 @keyframes mymove {
 	100% {
-		transform: rotate(90deg);
-	}
-}
-/* @keyframes mymove {
-	25% {
-		transform: rotate(90deg);
-	}
-	50% {
 		transform: rotate(180deg);
 	}
-	75% {
-		transform: rotate(270deg);
-	}
-	100% {
-		transform: rotate(360deg);
-	}
-} */
+}

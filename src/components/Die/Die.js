@@ -11,7 +11,10 @@ class Die extends Component {
 	}
 	render() {
 		const { isRolling, isLocked } = this.props;
-		const cls = 'Die' + (isLocked ? ' Die-locked' : '') + (isRolling ? ' Die-rolling' : '');
+		const cls =
+			'Die' +
+			(isLocked ? ' Die-locked' : '') +
+			(isRolling && !isLocked ? ' Die-rolling' : '');
 		return (
 			<div className={cls} onClick={this.lockTheDie}>
 				<i className={`fas fa-dice-${this.props.value}`}></i>

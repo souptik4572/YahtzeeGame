@@ -67,7 +67,7 @@ class Game extends Component {
 		this.setState({ isRolling: true }, () => {
 			setTimeout(() => {
 				this.setState({ isRolling: false });
-			}, 500);
+			}, 1000);
 			this.setState({ dice: newDiceValues, rollsLeft: this.state.rollsLeft - 1 });
 		});
 	}
