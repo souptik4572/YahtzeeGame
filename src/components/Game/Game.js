@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import './Game.css';
 import { v4 as uuidv4 } from 'uuid';
 
-import Dice from './Dice';
-import Score from './Score';
-import { pickRandomValue, numberToWords } from './helper';
-import { individualScore, checkThreeOfKind, checkFourOfKind, checkFullHouse, checkLargeStraight, checkYahtzee, sumAllValues } from './scoreHelper';
+import Dice from '../Dice/Dice';
+import Score from '../Score/Score';
+import { pickRandomValue, numberToWords } from '../../helpers/helper';
+import { individualScore, checkThreeOfKind, checkFourOfKind, checkFullHouse, checkLargeStraight, checkYahtzee, sumAllValues } from '../../helpers/scoreHelper';
 
 const Rolls_Left = 3;
 const Total_Rounds = 12;

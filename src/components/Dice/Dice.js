@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './Dice.css';
 
-import Die from './Die';
-import { numberToWords } from './helper';
+import Die from '../Die/Die';
+import { numberToWords } from '../../helpers/helper';
 
 class Dice extends Component {
     render() {
