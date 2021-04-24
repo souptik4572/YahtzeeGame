@@ -7,7 +7,7 @@
 	padding-top: 7px;
 	padding-left: 5px;
 	padding-right: 5px;
-    transition: 0.2s;
+	transition: 0.2s;
 }
 
 .Score:hover {
@@ -19,8 +19,31 @@
 	text-transform: capitalize;
 }
 
-.Score-assigned, .Score-assigned:hover {
-	background-color: #90a4ae;
-	color: white;
+.Score-assigned,
+.Score-assigned:hover {
+	background: linear-gradient(
+		to right,
+		rgba(209, 196, 233, 1) 0%,
+		rgba(209, 196, 233, 1) 0%,
+		rgba(209, 196, 233, 1) 30%,
+		rgba(227, 242, 253, 1) 40%
+	);
+	background-size: 300% 300%;
+	transition: 0.3s;
+	animation: Slide 0.5s ease 1;
+	cursor: not-allowed;
 	font-weight: 400;
+}
+
+.Score-assigned .Score-name {
+	text-decoration: line-through;
+}
+
+@keyframes Slide {
+	0% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 51%;
+	}
 }
