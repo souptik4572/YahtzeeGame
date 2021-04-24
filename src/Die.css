@@ -1,0 +1,9 @@
+.Die {
+    margin: 5px 0.15em;
+    font-size: 4rem;
+    color: white;
+}
+
+.Die-locked {
+    opacity: 0.6;
+}
