@@ -7,7 +7,7 @@
     padding-top: 7px;
     padding-left: 5px;
     padding-right: 5px;
-    font-style: italic;
+    /* font-style: italic; */
 }
 
 .Score:hover {
@@ -19,5 +19,7 @@
 }
 
 .Score-assigned {
-    background-color: grey;
+    background-color: #90a4ae;
+    color: white;
+    font-weight: 400;
 }

@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@100&family=Lato:wght@100&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital@1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400&display=swap');
 
 .Game {
 	margin: 5em auto 5em auto;
@@ -9,7 +8,8 @@
 
 .Game-dice {
 	background-color: #4527a0;
-	width: 37%;
+	width: 40%;
+	min-width: 420px;
 	height: auto;
 	margin: 0px auto;
 	padding-top: 20px;
@@ -33,7 +33,6 @@
 	color: white;
 	background-color: #0091ea;
 	font-family: 'Lato', sans-serif;
-	font-weight: 500;
 }
 
 .Game-dice button:hover {
@@ -47,12 +46,13 @@
 
 .Game-score {
 	background-color: white;
-	width: 37%;
+	width: 40%;
+	min-width: 420px;
 	height: auto;
 	margin: 0px auto;
 	padding-top: 20px;
 	padding-bottom: 25px;
-	font-weight: bolder;
+	font-weight: 300;
 }
 
 .Game-score-parts {
