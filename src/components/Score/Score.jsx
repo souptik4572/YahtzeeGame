@@ -5,13 +5,11 @@ const Score = ({ id, scoreName, scoreValue, assignScore }) => {
     const handleScore = () => {
         assignScore(id);
     };
-
     return (
         <div
             className={
-                "Score" + typeof scoreValue === "number"
-                    ? " Score-assigned"
-                    : ""
+                "Score" +
+                (typeof scoreValue === "number" ? " Score-assigned" : "")
             }
             onClick={handleScore}
         >
