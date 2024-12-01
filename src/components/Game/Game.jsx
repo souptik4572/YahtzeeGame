@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import "./Game.css";
-import { v4 as uuidv4 } from "uuid";
 
 import Dice from "../Dice/Dice.jsx";
 import Score from "../Score/Score.jsx";
-import { pickRandomValue, numberToWords } from "../../helpers/generalHelper";
+import { pickRandomValue, numberToWords, generateDiceState, generateUpperScores } from "../../helpers/generalHelper";
 import {
     individualScore,
     checkThreeOfKind,
@@ -15,27 +14,15 @@ import {
     checkYahtzee,
     sumAllValues,
 } from "../../helpers/scoreHelper";
-
-const ROLLS_LEFT = 3;
-const TOTAL_ROUNDS = 13;
+import { ROLLS_LEFT, TOTAL_ROUNDS } from "../../helpers/constants.js"
 
 const Game = ({ numberOfDie = 5 }) => {
-    const [dice, setDice] = useState(
-        Array.from({ length: numberOfDie }).map(() => {
-            return {
-                id: uuidv4(),
-                isLocked: false,
-                value: pickRandomValue(),
-            };
-        })
-    );
+    const [dice, setDice] = useState(generateDiceState(numberOfDie));
     const [isRolling, setIsRolling] = useState(false);
     const [rollsLeft, setRollsLeft] = useState(ROLLS_LEFT);
     const [totalScore, setTotalScore] = useState(0);
     const [totalRounds, setTotalRounds] = useState(TOTAL_ROUNDS);
-    const [upperScore, setUpperScore] = useState(
-        Array.from({ length: 6 }).map(() => undefined)
-    );
+    const [upperScore, setUpperScore] = useState(generateUpperScores(6));
     const [threeOfKind, setThreeOfKind] = useState(undefined);
     const [fourOfKind, setFourOfKind] = useState(undefined);
     const [fullHouse, setFullHouse] = useState(undefined);
@@ -149,19 +136,11 @@ const Game = ({ numberOfDie = 5 }) => {
     };
 
     const handleRestart = () => {
-        setDice(
-            Array.from({ length: numberOfDie }).map(() => {
-                return {
-                    id: uuidv4(),
-                    isLocked: false,
-                    value: pickRandomValue(),
-                };
-            })
-        );
+        setDice(generateDiceState(numberOfDie));
         setRollsLeft(ROLLS_LEFT);
         setTotalScore(0);
         setTotalRounds(TOTAL_ROUNDS);
-        setUpperScore(Array.from({ length: 6 }).map(() => undefined));
+        setUpperScore(generateUpperScores(6));
         setThreeOfKind(undefined);
         setFourOfKind(undefined);
         setFullHouse(undefined);
