@@ -1,7 +1,15 @@
 import React from "react";
 import "./Die.css";
 
-const Die = ({ idx, isLocked, isRolling, value, lock }) => {
+interface DieProps {
+    idx: string;
+    isLocked: boolean;
+    isRolling: boolean;
+    value: string;
+    lock: (uniqueId: string) => void;
+}
+
+const Die: React.FC<DieProps> = ({ idx, isLocked, isRolling, value, lock }) => {
     const lockTheDie = () => {
         lock(idx);
     };

@@ -1,9 +1,9 @@
 import React from "react";
 import "./App.css";
 
-import Game from "./components/Game/Game.jsx";
+import Game from "./components/Game/Game";
 
-const App = () => {
+const App: React.FC = () => {
     return (
         <div className="App">
             <Game />

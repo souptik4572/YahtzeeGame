@@ -1,10 +1,17 @@
 import React from "react";
 import "./Dice.css";
 
-import Die from "../Die/Die.jsx";
+import Die from "../Die/Die";
 import { numberToWords } from "../../helpers/generalHelper";
+import { DieType } from "../../types/gameTypes";
 
-const Dice = ({ lock, isRolling, diceValues }) => {
+interface DiceProps {
+    lock: (uniqueId: string) => void;
+    isRolling: boolean;
+    diceValues: DieType[];
+}
+
+const Dice: React.FC<DiceProps> = ({ lock, isRolling, diceValues }) => {
     const allDie = diceValues.map((eachValue) => {
         const dieValue = numberToWords(eachValue.value);
         return (

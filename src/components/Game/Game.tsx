@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import "./Game.css";
 
-import Dice from "../Dice/Dice.jsx";
-import Score from "../Score/Score.jsx";
-import { pickRandomValue, numberToWords, generateDiceState, generateUpperScores } from "../../helpers/generalHelper";
+import Dice from "../Dice/Dice";
+import Score from "../Score/Score";
+import {
+    pickRandomValue,
+    numberToWords,
+    generateDiceState,
+    generateUpperScores,
+} from "../../helpers/generalHelper";
 import {
     individualScore,
     checkThreeOfKind,
@@ -14,22 +19,29 @@ import {
     checkYahtzee,
     sumAllValues,
 } from "../../helpers/scoreHelper";
-import { ROLLS_LEFT, TOTAL_ROUNDS } from "../../helpers/constants.js"
+import { ROLLS_LEFT, TOTAL_ROUNDS } from "../../helpers/constants";
+import { DieType, ScoreType } from "../../types/gameTypes";
 
-const Game = ({ numberOfDie = 5 }) => {
-    const [dice, setDice] = useState(generateDiceState(numberOfDie));
-    const [isRolling, setIsRolling] = useState(false);
-    const [rollsLeft, setRollsLeft] = useState(ROLLS_LEFT);
-    const [totalScore, setTotalScore] = useState(0);
-    const [totalRounds, setTotalRounds] = useState(TOTAL_ROUNDS);
-    const [upperScore, setUpperScore] = useState(generateUpperScores(6));
-    const [threeOfKind, setThreeOfKind] = useState(undefined);
-    const [fourOfKind, setFourOfKind] = useState(undefined);
-    const [fullHouse, setFullHouse] = useState(undefined);
-    const [smallStraight, setSmallStraight] = useState(undefined);
-    const [largeStraight, setLargeStraight] = useState(undefined);
-    const [yahtzee, setYahtzee] = useState(undefined);
-    const [chance, setChance] = useState(undefined);
+interface GameProps {
+    numberOfDie?: number;
+}
+
+const Game: React.FC<GameProps> = ({ numberOfDie = 5 }) => {
+    const [dice, setDice] = useState<DieType[]>(generateDiceState(numberOfDie));
+    const [isRolling, setIsRolling] = useState<boolean>(false);
+    const [rollsLeft, setRollsLeft] = useState<number>(ROLLS_LEFT);
+    const [totalScore, setTotalScore] = useState<number>(0);
+    const [totalRounds, setTotalRounds] = useState<number>(TOTAL_ROUNDS);
+    const [upperScore, setUpperScore] = useState<ScoreType[]>(
+        generateUpperScores(6)
+    );
+    const [threeOfKind, setThreeOfKind] = useState<ScoreType>(undefined);
+    const [fourOfKind, setFourOfKind] = useState<ScoreType>(undefined);
+    const [fullHouse, setFullHouse] = useState<ScoreType>(undefined);
+    const [smallStraight, setSmallStraight] = useState<ScoreType>(undefined);
+    const [largeStraight, setLargeStraight] = useState<ScoreType>(undefined);
+    const [yahtzee, setYahtzee] = useState<ScoreType>(undefined);
+    const [chance, setChance] = useState<ScoreType>(undefined);
 
     const handleRoll = async () => {
         const newDiceValues = dice.map((die) => {
@@ -44,7 +56,7 @@ const Game = ({ numberOfDie = 5 }) => {
         setRollsLeft(rollsLeft - 1);
     };
 
-    const handleLock = (uniqueId) => {
+    const handleLock = (uniqueId: string): void => {
         const newDiceLocks = dice.map((die) => {
             if (uniqueId === die.id && !isRolling) {
                 return { ...die, isLocked: !die.isLocked };
@@ -55,22 +67,21 @@ const Game = ({ numberOfDie = 5 }) => {
     };
 
     const unlockAllDie = async () => {
-        console.log("Unlocking all die");
         const newDiceLocks = dice.map((die) => {
             return { ...die, isLocked: false };
         });
         setDice(newDiceLocks);
     };
 
-    const increaseScore_decreaseRound = async (newScore) => {
+    const increaseScore_decreaseRound = async (newScore: number) => {
         setTotalScore(totalScore + newScore);
         setTotalRounds(totalRounds - 1);
-        await unlockAllDie(handleRoll);
+        await unlockAllDie();
         await handleRoll();
         setRollsLeft(ROLLS_LEFT);
     };
 
-    const assignUpperScore = (id) => {
+    const assignUpperScore = (id: number): void => {
         if (upperScore[id] === undefined) {
             const newUpperScore = upperScore;
             newUpperScore[id] = individualScore(id + 1, dice);
@@ -79,7 +90,7 @@ const Game = ({ numberOfDie = 5 }) => {
         }
     };
 
-    const assignThreeOfKind = () => {
+    const assignThreeOfKind = (): void => {
         if (threeOfKind === undefined) {
             const threeScore = checkThreeOfKind(dice);
             setThreeOfKind(threeScore);
@@ -87,7 +98,7 @@ const Game = ({ numberOfDie = 5 }) => {
         }
     };
 
-    const assignFourOfKind = () => {
+    const assignFourOfKind = (): void => {
         if (fourOfKind === undefined) {
             const fourScore = checkFourOfKind(dice);
             setFourOfKind(fourScore);
@@ -95,7 +106,7 @@ const Game = ({ numberOfDie = 5 }) => {
         }
     };
 
-    const assignFullHouse = () => {
+    const assignFullHouse = (): void => {
         if (fullHouse === undefined) {
             const fullHouseScore = checkFullHouse(dice);
             setFullHouse(fullHouseScore);
@@ -103,7 +114,7 @@ const Game = ({ numberOfDie = 5 }) => {
         }
     };
 
-    const assignSmallStraight = () => {
+    const assignSmallStraight = (): void => {
         if (smallStraight === undefined) {
             const smallStraightScore = checkSmallStraight(dice);
             setSmallStraight(smallStraightScore);
@@ -111,7 +122,7 @@ const Game = ({ numberOfDie = 5 }) => {
         }
     };
 
-    const assignLargeStraight = () => {
+    const assignLargeStraight = (): void => {
         if (largeStraight === undefined) {
             const largeStraightScore = checkLargeStraight(dice);
             setLargeStraight(largeStraightScore);
@@ -119,7 +130,7 @@ const Game = ({ numberOfDie = 5 }) => {
         }
     };
 
-    const assignYahtzee = () => {
+    const assignYahtzee = (): void => {
         if (yahtzee === undefined) {
             const yahtzeeScore = checkYahtzee(dice);
             setYahtzee(yahtzeeScore);
@@ -127,7 +138,7 @@ const Game = ({ numberOfDie = 5 }) => {
         }
     };
 
-    const assignChance = () => {
+    const assignChance = (): void => {
         const chanceScore = sumAllValues(dice);
         if (chance === undefined) {
             setChance(chanceScore);
@@ -135,7 +146,7 @@ const Game = ({ numberOfDie = 5 }) => {
         }
     };
 
-    const handleRestart = () => {
+    const handleRestart = (): void => {
         setDice(generateDiceState(numberOfDie));
         setRollsLeft(ROLLS_LEFT);
         setTotalScore(0);
@@ -155,7 +166,6 @@ const Game = ({ numberOfDie = 5 }) => {
             <div className="Game-dice">
                 <p>Yahtzee!</p>
                 <Dice
-                    nDie={numberOfDie}
                     diceValues={dice}
                     lock={handleLock}
                     isRolling={isRolling}

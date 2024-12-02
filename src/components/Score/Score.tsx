@@ -1,7 +1,15 @@
 import React from "react";
 import "./Score.css";
+import { ScoreValueType } from "../../types/gameTypes";
 
-const Score = ({ id, scoreName, scoreValue, assignScore }) => {
+interface ScoreProps {
+	id: number,
+	scoreName: string,
+	scoreValue: ScoreValueType,
+	assignScore: (id: number) => void
+}
+
+const Score: React.FC<ScoreProps>= ({ id, scoreName, scoreValue, assignScore }) => {
     const handleScore = () => {
         assignScore(id);
     };
