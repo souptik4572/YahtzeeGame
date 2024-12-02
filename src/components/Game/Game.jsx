@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import "./Game.css";
 
 import Dice from "../Dice/Dice.jsx";
@@ -31,18 +31,18 @@ const Game = ({ numberOfDie = 5 }) => {
     const [yahtzee, setYahtzee] = useState(undefined);
     const [chance, setChance] = useState(undefined);
 
-    const handleRoll = async () => {
-        const newDiceValues = dice.map((die) => {
-            if (!die.isLocked) return { ...die, value: pickRandomValue() };
-            return die;
-        });
-        setIsRolling(true);
-        setTimeout(() => {
-            setIsRolling(false);
-        }, 1000);
-        setDice(newDiceValues);
-        setRollsLeft(rollsLeft - 1);
-    };
+    const handleRoll = useCallback(async () => {
+		setIsRolling(true);
+		setDice(prevDice => 
+			prevDice.map(die => 
+				!die.isLocked ? { ...die, value: pickRandomValue() } : die
+			)
+		);
+		setRollsLeft(prev => prev - 1);
+		setTimeout(() => {
+			setIsRolling(false);
+		}, 1000);
+	}, []);
 
     const handleLock = (uniqueId) => {
         const newDiceLocks = dice.map((die) => {
@@ -54,13 +54,12 @@ const Game = ({ numberOfDie = 5 }) => {
         setDice(newDiceLocks);
     };
 
-    const unlockAllDie = async () => {
-        console.log("Unlocking all die");
-        const newDiceLocks = dice.map((die) => {
-            return { ...die, isLocked: false };
-        });
-        setDice(newDiceLocks);
-    };
+    const unlockAllDie = useCallback(async () => {
+		setDice(prevDice => 
+			prevDice.map(die => ({ ...die, isLocked: false }))
+		);
+	}, []);
+	
 
     const increaseScore_decreaseRound = async (newScore) => {
         setTotalScore(totalScore + newScore);
